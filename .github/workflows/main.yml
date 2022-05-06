@@ -1,26 +1,12 @@
-name: Close Pull Request
-
-# only trigger on pull request closed events
-on:
-  pull_request:
-    types: [ closed ]
+name: A workflow for my Hello World file
+on: push
 
 jobs:
-  merge_job:
-    # this job will only run if the PR has been merged
-    if: github.event.pull_request.merged == true
+  build:
+    name: Hello world action
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        #echo PR #${{ github.event.number }} has been merged
-        echo ${{ github.event.head_commit.message }}
-        #MSG=$(git log --format=%B -n 1 ${{github.event.after}})
-        #echo "::set-env name=COMMIT_MESSAGE::${MSG}"
-
-  close_job:
-    # this job will only run if the PR has been closed without being merged
-    if: github.event.pull_request.merged == false
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        echo PR #${{ github.event.number }} has been closed without being merged
+      - uses: actions/checkout@v1
+      - uses: ./action-a
+        with:
+          MY_NAME: "Mona"
