@@ -26,14 +26,21 @@
 #        echo PR #${{ github.event.number }} has been closed without being merged
 #
 name: show event, set tag
-  id: gen-tag
-  shell: python3 {0}
-  run: |
-    import json
-    import os
-    import shlex
-    with open(os.environ['GITHUB_EVENT_PATH']) as fh:
-        event = json.load(fh)
-    print(event['head_commit'])
-    tag = event['head_commit']['message'].split()[0]
-    print(f'::set-output name=tag::{shlex.quote(tag)}')
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  merge_job:
+    runs-on: ubuntu-latest
+    shell: python3 {0}
+    steps:
+      - run: |
+          import json
+          import os
+          import shlex
+          with open(os.environ['GITHUB_EVENT_PATH']) as fh:
+              event = json.load(fh)
+          print(event['head_commit'])
+          tag = event['head_commit']['message'].split()[0]
+          print(f'::set-output name=tag::{shlex.quote(tag)}')
