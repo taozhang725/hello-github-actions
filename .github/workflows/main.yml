@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo PR #${{ github.event.number }} has been merged
+        echo #${{ github.event.number }} has been merged
         echo ${{ github.event.head_commit.message }}
 
   close_job:
