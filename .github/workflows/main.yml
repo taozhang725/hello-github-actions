@@ -12,9 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo ${{ github.event.commit[0].message }} |
-        echo #${{ github.event.number }} has been merged |
+        #echo PR #${{ github.event.number }} has been merged
         echo ${{ github.event.head_commit.message }}
+        #MSG=$(git log --format=%B -n 1 ${{github.event.after}})
+        #echo "::set-env name=COMMIT_MESSAGE::${MSG}"
 
   close_job:
     # this job will only run if the PR has been closed without being merged
