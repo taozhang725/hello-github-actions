@@ -1,26 +1,39 @@
-name: Close Pull Request
+#name: Close Pull Request
 
-# only trigger on pull request closed events
-on:
-  pull_request:
-    types: [ closed ]
-
-jobs:
-  merge_job:
-    # this job will only run if the PR has been merged
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        #echo PR #${{ github.event.number }} has been merged
-        echo ${{ github.event.head_commit.message }}
-        #MSG=$(git log --format=%B -n 1 ${{github.event.after}})
-        #echo "::set-env name=COMMIT_MESSAGE::${MSG}"
-
-  close_job:
-    # this job will only run if the PR has been closed without being merged
-    if: github.event.pull_request.merged == false
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        echo PR #${{ github.event.number }} has been closed without being merged
+## only trigger on pull request closed events
+#on:
+#  pull_request:
+#    types: [ closed ]
+#
+#jobs:
+#  merge_job:
+#    # this job will only run if the PR has been merged
+#    if: github.event.pull_request.merged == true
+#    runs-on: ubuntu-latest
+#    steps:
+#    - run: |
+#        #echo PR #${{ github.event.number }} has been merged
+#        echo ${{ github.event.head_commit.message }}
+#        #MSG=$(git log --format=%B -n 1 ${{github.event.after}})
+#        #echo "::set-env name=COMMIT_MESSAGE::${MSG}"
+#
+#  close_job:
+#    # this job will only run if the PR has been closed without being merged
+#    if: github.event.pull_request.merged == false
+#    runs-on: ubuntu-latest
+#    steps:
+#    - run: |
+#        echo PR #${{ github.event.number }} has been closed without being merged
+#
+name: show event, set tag
+  id: gen-tag
+  shell: python3 {0}
+  run: |
+    import json
+    import os
+    import shlex
+    with open(os.environ['GITHUB_EVENT_PATH']) as fh:
+        event = json.load(fh)
+    print(event['head_commit'])
+    tag = event['head_commit']['message'].split()[0]
+    print(f'::set-output name=tag::{shlex.quote(tag)}')
