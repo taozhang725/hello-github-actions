@@ -2,10 +2,8 @@
 
 #!/bin/bash
 
-which git
-
 # get latest tag
-t=$(git describe --tags `git rev-list --tags --max-count=1`)
+t=$(./git describe --tags `git rev-list --tags --max-count=1`)
 
 # get current commit hash for tag
 commit=$(git rev-parse HEAD)
@@ -13,10 +11,10 @@ commit=$(git rev-parse HEAD)
 # if there are none, start tags at 0.0.0
 if [ -z "$t" ]
 then
-    log=$(git log --pretty=oneline)
+    log=$(./git log --pretty=oneline)
     t=0
 else
-    log=$(git log $t..HEAD --pretty=oneline)
+    log=$(./git log $t..HEAD --pretty=oneline)
 fi
 
 # get commit logs and determine home to bump the version
@@ -25,7 +23,7 @@ new=$((new+1))
 #echo $new
 
 # get repo name from git
-remote=$(git config --get remote.origin.url)
+remote=$(./git config --get remote.origin.url)
 repo=$(basename $remote .git)
 
 REPO_OWNER=taozhang725
@@ -39,4 +37,3 @@ curl -s -X POST https://api.github.com/$REPO_OWNER/$repo/git/refs \
   "sha": "$commit"
 }
 EOF
-
