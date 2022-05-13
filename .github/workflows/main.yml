@@ -8,5 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: ./action-a
-        with:
-          MY_NAME: "Mona"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: taozhang725
